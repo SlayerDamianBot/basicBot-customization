@@ -1604,6 +1604,69 @@
                 }
             },
 
+            biscoitoCommand: {
+                command: 'biscoito',
+                rank: 'user',
+                type: 'startsWith',
+                cookies: [':cookie: te deu um cookie crocante de chocolate!',
+                    ':cookie: te deu um cookie de aveia caseiro!',
+                    ':cookie: te deu um cookie velho e seco. Era o ultimo do pacote. Nojento!',
+                    ':cookie: te deu um biscoito de açucar. O que, sem farinha e granulado? Eu não tocaria nele.',
+                    ':cookie: te deu um cookie crocante. Ei, espere, esse é de uva passa. Credo!',
+                    ':cookie: te deu um cookie enorme . Encostando nele, te dá mais cookies. Estranho!',
+                    ':cookie: te deu um cookie da sorte. Está escrito “Porque você não está trabalhando?',
+                    ':cookie: te deu um cookie da sorte. Está escrito “Cumprimente alguém especial."',
+                    ':cookie: te deu um cookie da sorte. Está escrito “Arrisque-se.”',
+                    ':cookie: te deu um cookie da sorte. Está escrito “Saia um pouco”',
+                    ':cookie: te deu um cookie da sorte. Está escrito “Nao esqueça de comer seus legumes.”',
+                    ':cookie: te deu um cookie da sorte. Está escrito “Você ao menos malha?”',
+                    ':cookie: te deu um cookie da sorte. Está escrito ”se mover seu quadril, vai pegar todas as garotas.”',
+                    ':cookie: te deu um cookie da sorte. Está escrito “Eu te amo” <3',
+                    ':cookie: te deu um cookie Dourado. Você não pode comê-lo pois é de ouro. Droga!',
+                    ':cookie: te deu um cookie da sorte. Está escrito: fique em silencio por 5 minutos.',
+                    ':cookie: te deu um Oreo e um copo de leite!',
+                    ':cookie: te deu um cookie de Arco-ìris feito com amor :heart:',
+                    ':cookie: te deu um cookie velho que foi deixado na chuva. Está mofado.',
+                    ':cookie: te deu um biscoito da sorte. Está escrito "não toque essa música planejada"',
+                    ':cookie: te deu um cupcake!',
+                    ':cookie: te deu um brownie "especial"',
+                    ':cookie: te deu um cracker animal',
+                    ':cookie: te deu um biscoito Scooby',
+                    ':cookie: fez cookies fresquinhos, o cheiro está bom.',
+                    ':cookie: te deu um cookie da sorte. Está escrito "A vida trará coisas boas se tiveres paciência."'
+                ],
+                getCookie: function () {
+                    var c = Math.floor(Math.random() * this.cookies.length);
+                    return this.cookies[c];
+                },
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        var msg = chat.message;
+
+                        var space = msg.indexOf(' ');
+                        if (space === -1) {
+                            API.sendChat(basicBot.chat.eatcookie);
+                            return false;
+                        }
+                        else {
+                            var name = msg.substring(space + 2);
+                            var user = basicBot.userUtilities.lookupUserName(name);
+                            if (user === false || !user.inRoom) {
+                                return API.sendChat(subChat(basicBot.chat.nousercookie, {name: name}));
+                            }
+                            else if (user.username === chat.un) {
+                                return API.sendChat(subChat(basicBot.chat.selfbiscoito, {name: name}));
+                            }
+                            else {
+                                return API.sendChat(subChat(basicBot.chat.cookie, {nameto: user.username, namefrom: chat.un, cookie: this.getCookie()}));
+                            }
+                        }
+                    }
+                }
+            },
+            
             cookieCommand: {
                 command: 'cookie',
                 rank: 'user',
